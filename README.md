@@ -1,12 +1,17 @@
 Kanerva Sparse Distributed Memory experiment
 ============================================
 
-Results:
+Constants
+-------
 
 ADDR_BITS 256
+
 DATA_BITS 256
 
 HAMMING_DISTANCE 95
+
+Capacity
+--------
 
 HARD_LOCATIONS 8192
 
