@@ -1,0 +1,35 @@
+input vector:
+    address: N-bit vector, 256-bit
+    contents: M-bit vector, 256-bit
+
+Potential address space: 2^256 addresses
+
+8192 hard locations with addresses scattered randomly with uniform probability through the address space
+
+Each hard location has associated with it a set of 256 buckets to accumulate the vectors that may be stored into that location
+
+Each bucket is 8-bit up/down counter that can hold a count in the range [-127;+127] (if more than 127 or -127 is stored, the bucket will saturate at that max value)
+
+Storing a vector into the memory
+--------------------------------
+
+1. Find out all physical locations within the Hamming radius d around the address of the input vector
+
+2. For each physical location that falls within this sphere, accumulate the contents portion of the input vector into each of the 256 associated buckets
+
+Reading
+-------
+
+Given a retrieval address, the process of reading from the memory proceeds like this:
+
+1. Find all addresses of Hamming radius d' (which need not equal the radius d for storing) centered at the retrieval cue
+
+2. Derive the i-th bit of the output vector (i going from 1 to M) in a manner identical to that used in the simple example
+
+Specifically, sum the contents of the i-th buckets of all the locations falling within the sphere drawn above, and then threshold the sum to either 1 or 0 based on whether the sum is positive or negative
+
+Note: the software could in theory be modified to instead of having m=256 8-bit counters associated with each hard location, one could have m=128 16-bit counters, or m=64 32-bit counters. The positive and negative ceilings for the counters would then also be changed in software to +-32767 abnd f2147483647, respectively. Since the microprocessor on the stack module uses a 32-bit word length, it is impractical to implement counters larger than this.
+
+Autoassociative dynamics
+------------------------
+
